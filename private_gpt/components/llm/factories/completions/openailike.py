@@ -37,7 +37,7 @@ class OpenAILikeCompletionsFactory(LLMFactory):
 
         prompt_style = (
             get_prompt_style(
-                model_config.prompt_style or "default", tokenizer=tokenizer
+                model_config.prompt_style or "chat", tokenizer=tokenizer
             )
             if tokenizer
             else None

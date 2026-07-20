@@ -42,7 +42,7 @@ server:
 
 data:
   local_ingestion:
-    enabled: ${LOCAL_INGESTION_ENABLED:false}
+    enabled: ${LOCAL_INGESTION_ENABLED:true}
     allow_ingest_from: ["*"]
   local_data_folder: ${PGPT_LOCAL_DATA_FOLDER:local_data/private_gpt}
   reader: ${PGPT_DATA_READER:auto}
@@ -99,14 +99,23 @@ stream:
   minimum_connections: ${PGPT_ASYNC_MINIMUM_CONNECTIONS:50}
 
 llm:
-  default_model: ${PGPT_LLM_DEFAULT:}
+  default_model: ${PGPT_LLM_DEFAULT:${PGPT_LLM_MODEL:gpt-4o-mini}}
   auto_discover_models: ${PGPT_LLM_AUTO_DISCOVER_MODELS:true}
 
 # We need to have at least one model defined here, even if it's just a placeholder for the default model defined above.
-models: []
+models:
+  - name: ${PGPT_LLM_MODEL:gpt-4o-mini}
+    type: llm
+    mode: openai
+    context_window: ${PGPT_LLM_CONTEXT_WINDOW:8192}
+  - name: ${PGPT_EMBEDDING_MODEL:text-embedding-3-small}
+    type: embedding
+    mode: openai
+    context_window: ${PGPT_EMBEDDING_CONTEXT_WINDOW:8192}
+    embed_dim: ${PGPT_EMBED_DIM:1024}
 
 embedding:
-  default_model: ${PGPT_EMBEDDING_DEFAULT:}
+  default_model: ${PGPT_EMBEDDING_DEFAULT:${PGPT_EMBEDDING_MODEL:text-embedding-3-small}}
   auto_discover_models: ${PGPT_EMBEDDING_AUTO_DISCOVER_MODELS:true}
   ingest_mode: simple
 

@@ -2994,6 +2994,16 @@
                 <input id="defaultCollection" autocomplete="off" spellcheck="false" placeholder="pgpt_collection" />
                 <small>All Documents and Skills operations use this collection. Document-enabled chats search artifacts here.</small>
               </div>
+              <div class="field">
+                <label for="documentsAutoRefreshInterval">Documents auto refresh</label>
+                <select id="documentsAutoRefreshInterval">
+                  <option value="0">Off</option>
+                  <option value="2000">Every 2 seconds</option>
+                  <option value="5000">Every 5 seconds</option>
+                  <option value="10000">Every 10 seconds</option>
+                </select>
+                <small>Applies when Context > Documents is open and the browser tab is visible.</small>
+              </div>
             </div>
           </div>
 
@@ -3365,6 +3375,7 @@
       extensions: ["zylon"],
       selectedModel: null,
       models: [],
+      documentsAutoRefreshIntervalMs: 5000,
       uiAppearance: JSON.parse(JSON.stringify(DEFAULT_APPEARANCE)),
       onboarding: JSON.parse(JSON.stringify(DEFAULT_ONBOARDING)),
       context: {
@@ -3383,6 +3394,9 @@
       view: state.activeChatId ? "chat" : "context",
       contextTab: "documents",
       docs: [],
+      docsRefreshTimer: null,
+      docsRefreshInFlight: false,
+      docsRefreshIntervalMs: Math.max(0, Number(state.documentsAutoRefreshIntervalMs) || 5000),
       debugEvents: [],
       citations: new Map(),
       selectedDebugId: null,
@@ -3451,6 +3465,9 @@
       merged.useCitations = value.useCitations !== false;
       merged.useDefaultPrompt = value.useDefaultPrompt !== false;
       merged.enableThinking = value.enableThinking !== false;
+      merged.documentsAutoRefreshIntervalMs = Number.isFinite(Number(value.documentsAutoRefreshIntervalMs))
+        ? Math.max(0, Number(value.documentsAutoRefreshIntervalMs))
+        : 5000;
       merged.extensions = Array.isArray(value.extensions) ? value.extensions : ["zylon"];
       const migratedCredentials =
         decodeBasicAuthHeader(value.privateGptAuthHeader) ||
@@ -3905,10 +3922,53 @@
       renderConnectionForm();
       renderContextTabs();
       renderContextPanels();
+      syncDocumentsAutoRefresh();
       renderChat();
       renderOnboarding();
       renderIcons();
       syncHash();
+    }
+
+    function shouldAutoRefreshDocuments() {
+      return runtime.view === "context" && runtime.contextTab === "documents" && !document.hidden;
+    }
+
+    function stopDocumentsAutoRefresh() {
+      if (runtime.docsRefreshTimer) {
+        clearInterval(runtime.docsRefreshTimer);
+        runtime.docsRefreshTimer = null;
+      }
+    }
+
+    function startDocumentsAutoRefresh() {
+      if (runtime.docsRefreshIntervalMs <= 0) return;
+      if (runtime.docsRefreshTimer) return;
+      runtime.docsRefreshTimer = setInterval(async () => {
+        if (!shouldAutoRefreshDocuments()) {
+          stopDocumentsAutoRefresh();
+          return;
+        }
+        if (runtime.docsRefreshInFlight) return;
+        runtime.docsRefreshInFlight = true;
+        try {
+          await refreshDocuments({
+            showToast: false,
+            throwOnError: false,
+            resetBeforeFetch: false,
+            suppressErrorToast: true
+          });
+        } finally {
+          runtime.docsRefreshInFlight = false;
+        }
+      }, runtime.docsRefreshIntervalMs);
+    }
+
+    function syncDocumentsAutoRefresh() {
+      if (shouldAutoRefreshDocuments()) {
+        startDocumentsAutoRefresh();
+      } else {
+        stopDocumentsAutoRefresh();
+      }
     }
 
     function renderSidebar() {
@@ -4014,6 +4074,9 @@
       $("#enableThinking").checked = state.enableThinking !== false;
       $("#extensions").value = (state.extensions || []).join(", ");
       $("#defaultCollection").value = state.context.documents.defaultCollection || "pgpt_collection";
+      $("#documentsAutoRefreshInterval").value = String(
+        Math.max(0, Number(state.documentsAutoRefreshIntervalMs) || 5000)
+      );
       $("#onboardingBaseUrl").value = state.privateGptBaseUrl || DEFAULT_BASE_URL;
       $("#onboardingUsername").value = state.privateGptUsername || "";
       $("#onboardingPassword").value = state.privateGptPassword || "";
@@ -5438,12 +5501,19 @@
     }
 
     async function refreshDocuments(options = {}) {
-      const { showToast = true, throwOnError = false } = options;
+      const {
+        showToast = true,
+        throwOnError = false,
+        resetBeforeFetch = true,
+        suppressErrorToast = false
+      } = options;
       const progress = showToast ? toast("Refreshing documents...", "loading", { persistent: true }) : null;
       try {
-        runtime.docs = [];
-        state.context.documents.knownArtifacts = [];
-        renderDocuments();
+        if (resetBeforeFetch) {
+          runtime.docs = [];
+          state.context.documents.knownArtifacts = [];
+          renderDocuments();
+        }
         const collection = encodeURIComponent(state.context.documents.defaultCollection || "pgpt_collection");
         const result = await apiFetch(`/v1/artifacts/list?collection=${collection}&_ts=${Date.now()}`, {}, { label: "List artifacts" });
         runtime.docs = Array.isArray(result?.data) ? result.data : [];
@@ -5454,7 +5524,7 @@
         return runtime.docs;
       } catch (error) {
         progress?.update(`Could not list documents: ${error.message}`, "error");
-        if (!progress) toast(`Could not list documents: ${error.message}`, "error");
+        if (!progress && !suppressErrorToast) toast(`Could not list documents: ${error.message}`, "error");
         if (throwOnError) throw error;
         return [];
       }
@@ -6338,7 +6408,11 @@
         useDefaultPrompt: $("#useDefaultPrompt").checked,
         enableThinking: $("#enableThinking").checked,
         extensions: $("#extensions").value.split(",").map(s => s.trim()).filter(Boolean),
-        collection: $("#defaultCollection").value.trim() || "pgpt_collection"
+        collection: $("#defaultCollection").value.trim() || "pgpt_collection",
+        documentsAutoRefreshIntervalMs: Math.max(
+          0,
+          Number($("#documentsAutoRefreshInterval").value || 5000)
+        )
       };
     }
 
@@ -6370,6 +6444,12 @@
       if (typeof values.enableThinking === "boolean") state.enableThinking = values.enableThinking;
       if (Array.isArray(values.extensions)) state.extensions = values.extensions;
       if (typeof values.collection === "string") state.context.documents.defaultCollection = values.collection || "pgpt_collection";
+      if (typeof values.documentsAutoRefreshIntervalMs === "number") {
+        state.documentsAutoRefreshIntervalMs = Math.max(0, values.documentsAutoRefreshIntervalMs);
+        runtime.docsRefreshIntervalMs = state.documentsAutoRefreshIntervalMs;
+        stopDocumentsAutoRefresh();
+        syncDocumentsAutoRefresh();
+      }
     }
 
     function saveAppearanceSettingsFrom(prefix) {
@@ -6543,6 +6623,14 @@
       $("#defaultCollection").addEventListener("change", async event => {
         await switchActiveCollection(event.target.value, { showToast: false });
       });
+      $("#documentsAutoRefreshInterval").addEventListener("change", event => {
+        const nextInterval = Math.max(0, Number(event.target.value || 5000));
+        state.documentsAutoRefreshIntervalMs = nextInterval;
+        runtime.docsRefreshIntervalMs = nextInterval;
+        saveState();
+        stopDocumentsAutoRefresh();
+        syncDocumentsAutoRefresh();
+      });
       $("#onboardingCheckButton").addEventListener("click", runOnboardingCheck);
       $("#onboardingStepPill1").addEventListener("click", () => {
         state.onboarding.step = 1;
@@ -6676,6 +6764,7 @@
 
       // Browser back/forward restores the view
       window.addEventListener("hashchange", () => { restoreFromHash(); render(); });
+      document.addEventListener("visibilitychange", syncDocumentsAutoRefresh);
 
       // Scroll fades for the chat list
       $("#chatListWrap").addEventListener("scroll", updateChatListFade, { passive: true });

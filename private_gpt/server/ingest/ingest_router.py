@@ -23,8 +23,10 @@ try:
         from celery.result import AsyncResult
 
     _CELERY_AVAILABLE = True
-except ImportError:
+except Exception:
     _CELERY_AVAILABLE = False
+    Task = None  # type: ignore[assignment,misc]
+    TaskStatus = None  # type: ignore[assignment,misc]
 
 
 logger = logging.getLogger(__name__)

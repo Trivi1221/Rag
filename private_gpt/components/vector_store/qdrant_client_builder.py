@@ -1,4 +1,5 @@
 import contextlib
+import asyncio
 import logging
 import os
 from typing import Any
@@ -16,9 +17,9 @@ logger.setLevel(logging.DEBUG)
 
 class QdrantClients:
     client: QdrantClient
-    aclient: AsyncQdrantClient
+    aclient: Any
 
-    def __init__(self, client: QdrantClient, aclient: AsyncQdrantClient) -> None:
+    def __init__(self, client: QdrantClient, aclient: Any) -> None:
         self.client = client
         self.aclient = aclient
 
@@ -74,15 +75,11 @@ class QdrantClientBuilder:
 
             config = dict(config)
             config["path"] = str(resolve_data_path(config["path"]))
-            # This is a workaround to allow to execute tests/local qdrant
-            # when we want to support sync/async client.
-            # To allow, remove .lock from the db_dir
-
             client = QdrantClient(**config)
-            QdrantClientBuilder.clean_lock(settings)
-
-            aclient = AsyncQdrantClient(**config)
-            QdrantClientBuilder.clean_lock(settings)
+            # Qdrant local mode uses a filesystem lock; opening an additional
+            # AsyncQdrantClient on the same path can fail on Windows.
+            # Reuse the sync client via an async adapter in local mode.
+            aclient = _AsyncQdrantLocalAdapter(client)
 
         else:
             client = QdrantClient(**config)
@@ -106,3 +103,23 @@ class QdrantClientBuilder:
         lock_file = os.path.join(db_dir, ".lock")
         if os.path.exists(lock_file):
             os.remove(lock_file)
+
+
+class _AsyncQdrantLocalAdapter:
+    """Minimal async adapter that delegates QdrantLocal calls to a sync client."""
+
+    def __init__(self, client: QdrantClient) -> None:
+        self._client = client
+
+    async def scroll(self, *args: Any, **kwargs: Any) -> Any:
+        return await asyncio.to_thread(self._client.scroll, *args, **kwargs)
+
+    async def query_batch_points(self, *args: Any, **kwargs: Any) -> Any:
+        return await asyncio.to_thread(self._client.query_batch_points, *args, **kwargs)
+
+    async def query_points(self, *args: Any, **kwargs: Any) -> Any:
+        return await asyncio.to_thread(self._client.query_points, *args, **kwargs)
+
+    async def close(self) -> None:
+        if hasattr(self._client, "close"):
+            await asyncio.to_thread(self._client.close)

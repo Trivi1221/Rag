@@ -24,6 +24,7 @@ def _build_chat_template_prompt_style(*args: Any, **kwargs: Any) -> PromptStyleB
 
 
 _BUILTIN_PROMPT_STYLE_FACTORIES: dict[str, PromptStyleProvider] = {
+    "default": _build_chat_template_prompt_style,
     "chat": _build_chat_template_prompt_style,
 }
 

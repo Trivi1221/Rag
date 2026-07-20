@@ -21,17 +21,14 @@ class DatabaseFunctionsInspector(DatabaseObjectInspector):
                 return self._get_sqlserver_functions(schema)
             if self._db_type in ["db2", "ibm_db_sa"]:
                 return self._get_db2_functions(schema)
-
-            # TODO: Postgres support is not complete
-            # elif self._db_type == "postgresql":
-            #    return self._get_postgresql_functions(schema)
+            if self._db_type in ["postgresql", "postgres"]:
+                return self._get_postgresql_functions(schema)
             else:
                 return []
         except SQLAlchemyError:
             return []
 
     def _get_postgresql_functions(self, schema: str) -> list[InspectedFunction]:
-        # TODO: review this function (it is not finished)
         self._ensure_connected()
         schema_filter = f"AND n.nspname = '{schema}'" if schema else ""
         if self._is_readonly:
@@ -101,11 +98,7 @@ class DatabaseFunctionsInspector(DatabaseObjectInspector):
                     current_function.name = name
                     current_function.return_types = [return_type]
                     current_function.parameters = []
-                if (
-                    (param_name or param_position)
-                    and current_function
-                    and current_function.parameters
-                ):
+                if (param_name or param_position) and current_function:
                     parameter = InspectedFunctionParams()
                     parameter.name = (
                         param_name if param_name else f"arg{param_position}"

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import fcntl
 import json
 import logging
 import os
@@ -9,6 +8,11 @@ import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+try:
+    import fcntl  # type: ignore
+except ImportError:  # pragma: no cover - Windows
+    fcntl = None
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -123,6 +127,16 @@ class FileLock:
         logger.info(f"Acquiring lock: {self.lock_file}")
         self.lock_file.parent.mkdir(parents=True, exist_ok=True)
         self._fd = open(self.lock_file, "w")
+
+        # Windows does not expose fcntl; continue without advisory locking.
+        if fcntl is None:
+            logger.warning(
+                "fcntl is unavailable on this platform. Proceeding without file lock."
+            )
+            self._fd.write(f"{os.getpid()}\n")
+            self._fd.flush()
+            return self
+
         start = time.time()
         while True:
             try:
@@ -148,7 +162,8 @@ class FileLock:
     ) -> None:
         if self._fd:
             try:
-                fcntl.flock(self._fd.fileno(), fcntl.LOCK_UN)
+                if fcntl is not None:
+                    fcntl.flock(self._fd.fileno(), fcntl.LOCK_UN)
                 self._fd.close()
                 logger.info("Lock released")
             except Exception as e:

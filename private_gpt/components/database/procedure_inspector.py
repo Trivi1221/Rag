@@ -21,16 +21,15 @@ class DatabaseProcedureInspector(DatabaseObjectInspector):
                 return self._get_sqlserver_procedures(schema)
             if self._db_type in ["db2", "ibm_db_sa"]:
                 return self._get_db2_procedures(schema)
-                # TODO: postgres support is not complete
-            # elif self._db_type == "postgresql":
-            #    return self._get_postgresql_procedures(schema)
+            if self._db_type in ["postgresql", "postgres"]:
+                return self._get_postgresql_procedures(schema)
             else:
                 return []
         except SQLAlchemyError:
             return []
 
     def _get_postgresql_procedures(self, schema: str) -> list[InspectedProcedure]:
-        # TODO: review this function (it is not finished)
+        self._ensure_connected()
         schema_filter = f"AND n.nspname = '{schema}'" if schema else ""
         if self._is_readonly:
             schema_filter += " AND n.nspname NOT IN ('pg_temp_1', 'pg_toast_temp_1')"
@@ -100,11 +99,7 @@ class DatabaseProcedureInspector(DatabaseObjectInspector):
                     current_procedure.name = name
                     current_procedure.return_types = [return_type]
                     current_procedure.parameters = []
-                if (
-                    (param_name or param_position)
-                    and current_procedure
-                    and current_procedure.parameters
-                ):
+                if (param_name or param_position) and current_procedure:
                     parameter = InspectedProcedureParams()
                     parameter.name = (
                         param_name if param_name else f"arg{param_position}"

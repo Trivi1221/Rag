@@ -33,6 +33,32 @@ def test_environment_defaults_variables_are_loaded_with_duplicated_delimiters() 
     assert loaded["replaced"] == ":duped::"
 
 
+def test_environment_nested_default_variables_are_loaded() -> None:
+    sample_yaml = """
+    replaced: ${PGPT_LLM_DEFAULT:${PGPT_LLM_MODEL:gpt-4o-mini}}
+    """
+    loaded = load_yaml_with_envvars(io.StringIO(sample_yaml), {})
+    assert loaded["replaced"] == "gpt-4o-mini"
+
+
+def test_environment_nested_default_variables_prefer_outer_variable() -> None:
+    sample_yaml = """
+    replaced: ${PGPT_LLM_DEFAULT:${PGPT_LLM_MODEL:gpt-4o-mini}}
+    """
+    env = {"PGPT_LLM_DEFAULT": "gpt-4.1-mini"}
+    loaded = load_yaml_with_envvars(io.StringIO(sample_yaml), env)
+    assert loaded["replaced"] == "gpt-4.1-mini"
+
+
+def test_environment_nested_default_variables_prefer_inner_variable() -> None:
+    sample_yaml = """
+    replaced: ${PGPT_LLM_DEFAULT:${PGPT_LLM_MODEL:gpt-4o-mini}}
+    """
+    env = {"PGPT_LLM_MODEL": "gpt-4.1-nano"}
+    loaded = load_yaml_with_envvars(io.StringIO(sample_yaml), env)
+    assert loaded["replaced"] == "gpt-4.1-nano"
+
+
 def test_environment_without_defaults_fails() -> None:
     sample_yaml = """
     replaced: ${TEST_REPLACE_ME}

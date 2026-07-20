@@ -1,0 +1,271 @@
+[2026-07-07 12:52:35.378] [INFO] Ingesting files=['Hello.txt', 'Hi.txt', 'sample.txt', 'Triveni.txt']
+[2026-07-07 12:52:35.392] [INFO] Loaded 18 supported extensions from /v1/artifacts/readers
+[2026-07-07 12:52:35.393] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 12:52:35.626] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 12:52:35.627] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:52:35.851] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:52:35.851] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 12:52:36.082] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 12:52:36.093] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Triveni.txt
+[2026-07-07 12:52:36.295] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Triveni.txt
+[2026-07-07 12:52:36.297] [INFO] Skipping following files and directories: ['.git', '.DS_Store']
+[2026-07-07 12:52:36.297] [INFO] Watching C:\Users\DTRIVEN\Desktop\pgpt for changes, press Ctrl+C to stop...
+[2026-07-07 12:52:58.191] [INFO] Detected created at path=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt
+[2026-07-07 12:52:58.196] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt
+[2026-07-07 12:52:59.407] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt
+[2026-07-07 12:53:02.306] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt
+[2026-07-07 12:54:58.187] [INFO] Detected deleted at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:54:58.188] [INFO] Deleting artifact for removed file path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt artifact=Hi.txt
+[2026-07-07 12:54:58.661] [INFO] Completed delete sync for artifact=Hi.txt
+[2026-07-07 12:56:09.394] [INFO] Detected created at path=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 12:56:10.603] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 12:56:10.616] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}},"request_id":null,"exception":{"type":"InvalidRequest","message":"Request validation failed"},"detail":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}
+[2026-07-07 12:56:21.674] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:56:21.675] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:56:22.879] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:56:25.598] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 12:59:32.077] [INFO] Detected created at path=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 12:59:32.079] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 12:59:33.296] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 12:59:36.500] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 17:10:19.223] [INFO] Detected deleted at path=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 17:10:19.229] [INFO] Deleting artifact for removed file path=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt artifact=Hello.txt
+[2026-07-07 17:10:36.375] [ERROR] Failed to delete artifact during sync for path=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt artifact=Hello.txt
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:8080/v1/artifacts/delete
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 245, in _delete_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:8080/v1/artifacts/delete | response_body={"type":"error","error":{"type":"api_error","message":"Api Error","detail":{"code":"API_ERROR","explanation":"Storage folder C:\\Users\\DTRIVEN\\AppData\\Local\\private-gpt\\local_data\\qdrant is already accessed by another instance of Qdrant client. If you require concurrent access, use Qdrant server instead."}},"request_id":null,"exception":{"type":"RuntimeError","message":"Storage folder C:\\Users\\DTRIVEN\\AppData\\Local\\private-gpt\\local_data\\qdrant is already accessed by another instance of Qdrant client. If you require concurrent access, use Qdrant server instead."},"detail":"Storage folder C:\\Users\\DTRIVEN\\AppData\\Local\\private-gpt\\local_data\\qdrant is already accessed by another instance of Qdrant client. If you require concurrent access, use Qdrant server instead."}
+[2026-07-07 17:10:36.388] [INFO] Detected deleted at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 17:10:36.389] [INFO] Deleting artifact for removed file path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt artifact=Hi.txt
+[2026-07-07 17:10:38.048] [INFO] Completed delete sync for artifact=Hi.txt
+[2026-07-07 17:13:51.995] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:13:53.237] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:13:57.081] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:14:01.905] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:14:01.907] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:14:03.113] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:14:06.681] [INFO] Completed ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\sample.txt
+[2026-07-07 17:32:09.111] [INFO] Detected created at path=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 17:32:10.319] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 17:32:10.364] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}},"request_id":null,"exception":{"type":"InvalidRequest","message":"Request validation failed"},"detail":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}
+[2026-07-07 17:32:21.894] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 17:32:21.895] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 17:32:23.107] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt
+[2026-07-07 17:32:23.392] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\Hello.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":"No embedding model specified and no models are configured"}},"request_id":null,"exception":{"type":"ValueError","message":"No embedding model specified and no models are configured"},"detail":"No embedding model specified and no models are configured"}
+[2026-07-07 17:32:59.345] [INFO] Detected deleted at path=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt
+[2026-07-07 17:32:59.346] [INFO] Deleting artifact for removed file path=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt artifact=autosync_probe.txt
+[2026-07-07 17:32:59.369] [ERROR] Failed to delete artifact during sync for path=C:\Users\DTRIVEN\Desktop\pgpt\autosync_probe.txt artifact=autosync_probe.txt
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:8080/v1/artifacts/delete
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 245, in _delete_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:8080/v1/artifacts/delete | response_body={"type":"error","error":{"type":"api_error","message":"Api Error","detail":{"code":"API_ERROR","explanation":"VectorArtifactIndex for artifact=autosync_probe.txt is being populated."}},"request_id":null,"exception":{"type":"IndexNotReadyException","message":"VectorArtifactIndex for artifact=autosync_probe.txt is being populated."},"detail":"VectorArtifactIndex for artifact=autosync_probe.txt is being populated."}
+[2026-07-07 17:33:03.482] [INFO] Detected created at path=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 17:33:04.698] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt
+[2026-07-07 17:33:04.733] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\New Text Document.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}},"request_id":null,"exception":{"type":"InvalidRequest","message":"Request validation failed"},"detail":[{"type":"value_error","loc":"('body', 'input', 'file', 'value')","msg":"Value error, File input requires valid base64 encoded content","input":"","ctx":{"error":"File input requires valid base64 encoded content"}}]}
+[2026-07-07 17:33:15.509] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 17:33:15.512] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 17:33:16.721] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-07 17:33:16.776] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":"No embedding model specified and no models are configured"}},"request_id":null,"exception":{"type":"ValueError","message":"No embedding model specified and no models are configured"},"detail":"No embedding model specified and no models are configured"}
+[2026-07-07 17:33:43.707] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Triveni.txt
+[2026-07-07 17:33:43.733] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 17:33:44.914] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Triveni.txt
+[2026-07-07 17:33:44.945] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt
+[2026-07-07 17:33:44.967] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\Triveni.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":"No embedding model specified and no models are configured"}},"request_id":null,"exception":{"type":"ValueError","message":"No embedding model specified and no models are configured"},"detail":"No embedding model specified and no models are configured"}
+[2026-07-07 17:33:45.005] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\ytl.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 109, in _request
+    response.raise_for_status()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 113, in _request
+    raise requests.HTTPError(msg, response=response) from exc
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:8080/v1/artifacts/ingest | response_body={"type":"error","error":{"type":"invalid_request_error","message":"Invalid Request Error","detail":{"code":"INVALID_REQUEST_ERROR","explanation":"No embedding model specified and no models are configured"}},"request_id":null,"exception":{"type":"ValueError","message":"No embedding model specified and no models are configured"},"detail":"No embedding model specified and no models are configured"}
+[2026-07-08 10:52:43.309] [INFO] Detected modified at path=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-08 10:52:44.585] [INFO] Started ingesting file=C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt
+[2026-07-08 10:52:46.661] [ERROR] Failed to ingest document: C:\Users\DTRIVEN\Desktop\pgpt\Hi.txt, find the exception attached
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connection.py", line 500, in request
+    self.endheaders()
+  File "C:\Program Files\Python311\Lib\http\client.py", line 1277, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Program Files\Python311\Lib\http\client.py", line 1037, in _send_output
+    self.send(msg)
+  File "C:\Program Files\Python311\Lib\http\client.py", line 975, in send
+    self.connect()
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connection.py", line 331, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/artifacts/ingest (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 226, in _do_ingest_one
+    self._request(
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\scripts\ingest_folder.py", line 101, in _request
+    response = requests.request(
+               ^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DTRIVEN\Desktop\RAG\private-gpt\.venv\Lib\site-packages\requests\adapters.py", line 678, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/artifacts/ingest (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
